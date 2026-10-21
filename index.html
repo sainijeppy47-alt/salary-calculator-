@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salary Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      padding: 20px;
+    }
+    .app {
+      max-width: 400px;
+      margin: 20px auto;
+      background: white;
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 3px 12px #0001;
+    }
+    h2 { text-align: center; color: #174ea6; }
+    label { display: block; margin-top: 16px; }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 20px;
+      background: #1769e0;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h2>वेतन कैलकुलेटर</h2>
+    <label>Basic Pay (₹)</label>
+    <input id="basic" type="number" min="0" placeholder="जैसे 25000">
+    <label>DA (%)</label>
+    <input id="da" type="number" min="0" placeholder="जैसे 58">
+    <label>HRA (%)</label>
+    <input id="hra" type="number" min="0" placeholder="जैसे 10">
+    <label>अन्य कटौती (₹)</label>
+    <input id="deduction" type="number" min="0" value="0">
+    <button onclick="calculate()">वेतन निकालें</button>
+    <div id="result" aria-live="polite"></div>
+  </div>
+  <script>
+    function calculate() {
+      const basic = Number(document.getElementById('basic').value);
+      const da = Number(document.getElementById('da').value);
+      const hra = Number(document.getElementById('hra').value);
+      const deduction = Number(document.getElementById('deduction').value);
+      const result = document.getElementById('result');
+
+      if (
+        document.getElementById('basic').value === '' ||
+        basic <= 0 || da < 0 || hra < 0 || deduction < 0 ||
+        !Number.isFinite(basic + da + hra + deduction)
+      ) {
+        result.textContent = 'कृपया सही राशि भरें।';
+        return;
+      }
+
+      const daAmount = Math.round(basic * da / 100);
+      const hraAmount = Math.round(basic * hra / 100);
+      const gross = basic + daAmount + hraAmount;
+      const net = gross - deduction;
+
+      result.innerHTML =
+        'Basic Pay: ₹' + basic.toLocaleString('en-IN') +
+        '<br>DA: ₹' + daAmount.toLocaleString('en-IN') +
+        '<br>HRA: ₹' + hraAmount.toLocaleString('en-IN') +
+        '<br>कुल वेतन: ₹' + gross.toLocaleString('en-IN') +
+        '<br>कटौती: ₹' + deduction.toLocaleString('en-IN') +
+        '<br><strong>कटौती के बाद: ₹' +
+        net.toLocaleString('en-IN') + '</strong>';
+    }
+  </script>
+</body>
+</html>
